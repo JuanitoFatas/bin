@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+branch = ARGV.first
+puts `git checkout master && git checkout -b #{branch} && git push -u origin #{branch}`
