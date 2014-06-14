@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# Find my last commit in git log
+#
+# Usage:
+#
+# $ git-my-last-commit
+#
+
+`git log -1 -p --author $(git config user.email)`

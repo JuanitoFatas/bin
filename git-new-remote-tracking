@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# Create new branch and push to **origin**.
+#
+# Usage:
+#
+# $ git-new-remote-tracking awesome_branch
+
+branch = ARGV.first
+puts `git checkout master && git checkout -b #{branch} && git push -u origin #{branch}`

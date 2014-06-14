@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# touch + chmod +x
+#
+# Usage:
+#
+# $ touchx my-awesome-executable
+#
+
+file_name = ARGV.first
+`touch #{file_name} && chmod +x #{file_name}`

@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# Create new branch and push to **origin**.
+#
+# `deploy` under a git repo, will automatically do:
+#
+# `git add -A .` + `git push` + `git commit -m DEFAULT_MESSAGE`
+#
+# `DEFAULT_MESSAGE`: Site updated @ Fri Jun 13 16:44:48 CST 2014
+#
+# Options:
+#
+#   - `-m`: Specify message.
+#   - `-r`: Specify remote.
+#   - `-s`: Specify source.
+#
+# Usage:
+#
+# $ deploy
+# $ deploy -m "Init commit"
+# $ deploy -m "Blog update..." -r gh-pages
+# $ deploy -s source
+#
+
+abort('Not a Git repository.') unless File.exist? '.git'
+
+# Site updated at 16:15:11 on Friday 23 May 2014 @ CST
+def default_commit_message
+  now = Time.now
+  hms = now.strftime("%H:%M:%S")
+  dmy = now.strftime("%e %b %Y")
+  day = now.strftime("%A")
+  zone = now.strftime("%Z")
+  %W[Site updated at #{hms} on #{day} #{dmy} @ #{zone}].join ' '
+end
+
+$message = default_commit_message
+$remote = 'origin'
+$source = 'master'
+
+require 'optparse'
+
+OptionParser.new do |opts|
+  opts.banner = "Lazy man's git tool."
+
+  opts.on('-m', '--message MESSAGE', 'Set Commit Message') do |m|
+    $message = m
+  end
+
+  opts.on('-r', '--remote REMOTE', 'Set Push Remote') do |r|
+    $remote = r
+  end
+
+  opts.on('-s', '--source Source', 'Set Push Source') do |s|
+    $source = s
+  end
+end.parse!
+
+def git_add!
+  system *%w[git add -A .]
+end
+
+def git_commit!(msg=$message)
+  system *%W[git commit -m #{msg}]
+end
+
+def git_push!(remote=$remote, source=$source)
+  system *%W[git push #{remote} #{source}]
+end
+
+def ship_it!
+  git_add!
+  git_commit!
+  git_push!
+end
+
+ship_it!
