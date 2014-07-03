@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# mcd
+#
+# mkdir + cd
+
+`mkdir #{ARGV.first} && cd #{ARGV.first}`
