@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+
+dir = ARGV.last
+
+`for file in #{dir}/*.erb; do erb2slim $file ${file%erb}slim; done`

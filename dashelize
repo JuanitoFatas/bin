@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby -w
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+args = ARGV.dup
+
+puts args.map(&:downcase).join('-').gsub
