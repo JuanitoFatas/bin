@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby -w
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+USAGE = <<-TEXT
+Checkout to remote branch.
+
+Commands:
+
+  git-rco # Checkout to remote branch
+
+TEXT
+
+if ARGV.first == '-h' or '--help'
+  abort USAGE
+end
+
+branches = `git branch -r | ack origin | ack -v 'origin/master'`.gsub('  ', '').split("\n")
+
+local_branches = `git branch`.gsub('  ', '').split("\n")
+
+branches.each.with_index(1) do |branch, index|
+  puts "#{index}: #{branch}"
+end
+
+printf 'Select a new remote branch to checkout: '
+
+remote_branch = branches[gets.chomp.to_i - 1]
+new_branch    = remote_branch.gsub('origin/', '')
+
+abort("A branch named #{new_branch} already exists.") if local_branches.include? new_branch
+
+`git checkout -b #{new_branch} #{remote_branch}`
