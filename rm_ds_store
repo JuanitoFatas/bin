@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby -w
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+`find . -name '*.DS_Store' -type f -delete`
