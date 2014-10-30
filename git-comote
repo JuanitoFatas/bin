@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Get all remote branches
+branches=($(git branch -r | grep origin | grep -v 'origin/master'))
+
+# Prints choices
+for i in "${!branches[@]}"; do
+  index=$(($i+1))
+  echo "$index)" "${branches[$i]}"
+done
+
+# Select a choice
+echo ""
+read -p "Checkout Branch: " choice
+
+# Remote and Local branch names
+remote_branch=${branches[$(($choice-1))]}
+my_new_branch=${remote_branch//origin\//}
+
+# Running command
+cmd="git checkout -b ${my_new_branch} ${remote_branch}"
+echo "Running: $cmd"
+${cmd}

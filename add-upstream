@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby -w
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+abort('Plesae sepcify upstream URL.') if ARGV.empty?
+
+url = ARGV.first
+
+`git remote add upstream #{url}`
+
+puts "\n== remote upstream added with URL of #{url}."
+puts `git remote -v`

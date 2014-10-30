@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby -w
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+you = `git config --global user.username`.chomp!.downcase!
+
+original_url = `git config --get remote.origin.url`.chomp!
+
+author = original_url.scan(/\w+/)[3]
+
+forked_url = original_url.sub!(author, you)
+
+`git remote add #{you} #{forked_url}`
+
+puts "\n== #{you} remote added =="
+puts `git remote -v`

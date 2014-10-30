@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby -w
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+SASS_EXTENSION = 'scss'
+
+RULES = {
+  '@color'  => '$color',
+  '.border' => '@include border'
+}
+
+puts "Usage : ./less2sass file1 file2 ..." if ARGV.empty?
+
+file_names = ARGV
+file_names.each do |file_name|
+  begin
+    text = File.read(file_name)
+  rescue Exception
+    puts "Error : can't open file : #{file_name}"
+    next
+  end
+  RULES.each do |key, value|
+    text.gsub!(key, value)
+  end
+  base_name = File.basename(file_name, 'less')
+  dir_name  = File.dirname(file_name)
+  converted_file_path = "#{dir_name}/#{base_name}#{SASS_EXTENSION}"
+  begin
+    File.open(converted_file_path, "w") { |file| file << text }
+  rescue Exception
+    puts "Error : can't write file : #{converted_file_path}"
+  end
+  puts "\n== Output : #{converted_file_path} =="
+end
