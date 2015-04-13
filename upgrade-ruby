@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 
 # Exit cleanly from an early interrupt
-Signal.trap("INT") { abort }
+Signal.trap("INT") { fail }
+
+fail("Please clean your local file changes first.") if `git status --porcelain` != ""
+
+fail("Please run this task against master branch.") if `git rev-parse --abbrev-ref HEAD`.chomp! != "master"
 
 require "English"
 
