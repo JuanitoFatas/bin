@@ -37,7 +37,7 @@ puts "== Installing dependencies =="
 system "bundle check || bundle install"
 
 puts "== Run tests =="
-system "bin/rspec"
+system "bundle exec rspec"
 
 if $CHILD_STATUS.success?
   puts "== Checkout to a new branch: feature/upgrade-to-ruby-2-2-2 =="
@@ -50,5 +50,5 @@ if $CHILD_STATUS.success?
   puts "== Issue Pull Request =="
   system "hub pull-request -m 'Upgrade Ruby to 2.2.2'"
 else
-  fail "tests failed. Please check"
+  fail "tests failed. Please check!"
 end
