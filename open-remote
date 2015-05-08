@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
 fail "Please specify remote to open" if ARGV.empty?
 remote = `git remote -v | grep #{ARGV[0]}`
 matched = remote.match(%r{(?<repo_url>github.com:\S*)\.git})
