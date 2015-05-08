@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+fail "Please specify remote to open" if ARGV.empty?
+remote = `git remote -v | grep #{ARGV[0]}`
+matched = remote.match(%r{(?<repo_url>github.com:\S*)\.git})
+system "open", "https://#{matched[:repo_url]}".sub(".com:", ".com/")
