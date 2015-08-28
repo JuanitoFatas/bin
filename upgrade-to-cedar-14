@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+puts %($ heroku stack:set cedar-14)
+puts %($ git commit --allow-empty -m "Upgrading to Cedar-14")
+puts %($ git push heroku master)
