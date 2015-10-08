@@ -9,16 +9,23 @@ fail("Please run this task against master branch.") if `git rev-parse --abbrev-r
 
 require "English"
 
-NEW_VERSION = "2.2.2"
+# Edit these two constant
+
+NEW_VERSION = "2.2.3"
+NEW_VERSION_FOR_BRANCH = "2-2-3"
 
 puts "== Upgrade Ruby to #{NEW_VERSION} =="
 
+system "chruby 2.2.3"
+
 # .ruby-version
 
-IO.write(".ruby-version", File.open(".ruby-version") do |file|
-    file.read.sub(/^ruby-.*$/, "ruby-#{NEW_VERSION}")
-  end
-)
+if File.exist? ".ruby-version"
+  IO.write(".ruby-version", File.open(".ruby-version") do |file|
+      file.read.sub(/^ruby-.*$/, "ruby-#{NEW_VERSION}")
+    end
+  )
+end
 
 # Gemfile
 
@@ -41,18 +48,20 @@ puts "== Installing dependencies =="
 system "bundle check || bundle install"
 
 puts "== Run tests =="
-system "bundle exec rspec"
+if File.exist? "spec"
+  system "bundle exec rspec"
+end
 
 if $CHILD_STATUS.success?
-  puts "== Checkout to a new branch: feature/upgrade-to-ruby-2-2-2 =="
-  system "git checkout -b feature/upgrade-to-ruby-2-2-2"
+  puts "== Checkout to a new branch: feature/upgrade-to-ruby-#{NEW_VERSION_FOR_BRANCH} =="
+  system "git checkout -b feature/upgrade-to-ruby-#{NEW_VERSION_FOR_BRANCH}"
 
   puts "== Add & Commit & Push =="
-  system "git add . && git commit -m 'Upgrade to Ruby 2.2'"
-  system "git push origin feature/upgrade-to-ruby-2-2-2"
+  system "git add . && git commit -m 'Upgrade to Ruby #{NEW_VERSION}'"
+  system "git push origin feature/upgrade-to-ruby-#{NEW_VERSION_FOR_BRANCH}"
 
   puts "== Issue Pull Request =="
-  system "hub pull-request -m 'Upgrade Ruby to 2.2.2'"
+  system "hub pull-request -m 'Upgrade Ruby to #{NEW_VERSION}'"
 else
   fail "tests failed. Please check!"
 end
