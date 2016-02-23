@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+specs = [Dir["spec/**/*_spec.rb"] + Dir["spec/support/**/*.rb"]].flatten(1)
+
+def prefix_with_rspec(spec, lines)
+  lines.each do |line|
+    IO.write(spec, IO.read(spec).sub(line, "RSpec." + line))
+  end
+end
+
+def find_lines(lines, text)
+  lines.select { |line| line.start_with?(text) }
+end
+
+specs.each do |spec|
+  lines = IO.readlines spec
+
+  describe_lines = find_lines lines, "describe"
+  feature_lines = find_lines lines, "feature"
+  shared_examples_for_lines = find_lines lines, "shared_examples_for"
+
+  prefix_with_rspec(spec, describe_lines)
+  prefix_with_rspec(spec, feature_lines)
+  prefix_with_rspec(spec, shared_examples_for_lines)
+end
