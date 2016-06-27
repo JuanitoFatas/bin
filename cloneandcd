@@ -4,7 +4,7 @@
 # Exit cleanly from an early interrupt
 Signal.trap("INT") { abort }
 
-# Clone the repository if not exists and changes into it.
+# Clone the repository if not exist and change into it.
 #
 # Usage:
 #
@@ -13,7 +13,7 @@ Signal.trap("INT") { abort }
 
 owner, repo = ARGV.first.split("/")
 
-clone_url = "https://github.com/#{owner}/#{repo}"
+clone_url = "https://github.com/#{owner}/#{repo}.git"
 path = File.expand_path(File.join(`pwd`.chomp!, repo))
 system("git clone #{clone_url}")
 Dir.chdir(path) && system("zsh") if $?.exitstatus != 128
