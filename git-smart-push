@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+# As a user,
+# I want to push to my fork with current branch I'm on.
+
+class FindMyForkRemote
+  def self.call
+    candidate = `git remote -v`.split("\n").find do |remote|
+      fetch_github_fork?(remote)
+    end
+
+    (candidate || "").split("\t").first
+  end
+
+  def self.fetch_github_fork?(remote)
+    remote.include?("github.com") &&
+    remote.include?("fetch") &&
+    remote =~ /#{`git config user.name`.chomp!}\/#{File.basename(`pwd`).chomp!}/i
+  end
+  private_class_method :fetch_github_fork?
+end
+
+remote_target = FindMyForkRemote.call
+
+abort "Fork not found, please check with $ git remote -v" if remote_target.nil?
+
+current_branch = `git rev-parse --abbrev-ref HEAD`.chomp!
+
+`git push #{remote_target} #{current_branch}`
