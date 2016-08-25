@@ -26,4 +26,10 @@ abort "Fork not found, please check with $ git remote -v" if remote_target.nil?
 
 current_branch = `git rev-parse --abbrev-ref HEAD`.chomp!
 
-`git push #{remote_target} #{current_branch}`
+mode = ARGV.first
+
+if ["-f", "--force", "--force-with-lease"].include?(mode)
+  `git push #{remote_target} #{current_branch} #{mode}`
+else
+  `git push #{remote_target} #{current_branch}`
+end
