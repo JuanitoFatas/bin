@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# Checkout to master / gh-pages by default.
+# Otherwise let user choose which branch to checkout.
+#
+# Usage:
+#
+# $ smartcheckout
+#
+
+if !File.exist?(".git")
+  abort("Not a git repository")
+end
+
+def branch_exists?(branch)
+  `git rev-parse --verify --quiet #{branch}`
+end
+
+def checkout_and_exit(branch)
+  `git checkout #{branch}`
+  exit 0
+end
+
+def mystrip(str)
+  str.sub("* ", "").strip
+end
+
+def branches
+  @_branches ||= `git branch`.split("\n").map(&method(:mystrip))
+end
+
+if branches.size == 1
+  checkout_and_exit(branches.first)
+elsif branches.include?("master")
+  checkout_and_exit("master")
+elsif branches.include?("gh-pages")
+  checkout_and_exit("gh-pages")
+end
+
+branches.each_with_index do |branch, index|
+  puts "#{index}. #{branch}"
+end
+
+index = gets.chomp("\n").to_i
+
+if index.between?(0, branches.size-1)
+  `git checkout #{branches[index]}`
+else
+  puts "Not found. Program exit."
+end
