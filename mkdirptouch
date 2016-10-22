@@ -5,11 +5,11 @@ Signal.trap("INT") { abort }
 
 require "fileutils"
 
-# mkdir-p + create file
+# mkdir -p + touch
 #
 # Usage:
 #
-# $ mkdir-pf foo/bar/baz
+# $ mkdirptouch foo/bar/baz
 # $ tree foo
 # foo
 # └── bar
@@ -19,7 +19,7 @@ require "fileutils"
 
 dir_and_file = ARGV.first
 
-dirs = dir_and_file.split(File::Separator)[0..-2].join('/')
+dirs = dir_and_file.split(File::Separator)[0..-2].join("/")
 
 FileUtils.mkdir_p(dirs)
 FileUtils.touch(dir_and_file)
