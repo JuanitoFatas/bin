@@ -15,7 +15,7 @@ class FindMyForkRemote
   def self.fetch_github_or_gitlab_fork?(remote)
     (remote.include?("github.com") || remote.include?("gitlab.com")) &&
     remote.include?("fetch") &&
-    remote =~ /#{`git config user.name`.chomp!}\/#{File.basename(`pwd`).chomp!}/i
+    remote =~ /#{`git config user.name`.chomp!.sub(" ", "\\s*")}\/#{File.basename(`pwd`).chomp!}/i
   end
   private_class_method :fetch_github_or_gitlab_fork?
 end
