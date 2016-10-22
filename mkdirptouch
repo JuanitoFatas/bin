@@ -3,6 +3,8 @@
 # Exit cleanly from an early interrupt
 Signal.trap("INT") { abort }
 
+require "fileutils"
+
 # mkdir-p + create file
 #
 # Usage:
@@ -19,4 +21,5 @@ dir_and_file = ARGV.first
 
 dirs = dir_and_file.split(File::Separator)[0..-2].join('/')
 
-`mkdir -p #{dirs} && touch #{dir_and_file}`
+FileUtils.mkdir_p(dirs)
+FileUtils.touch(dir_and_file)
