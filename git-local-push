@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+# As a user,
+# I want to push my current local branch to origin.
+
+require "optparse"
+
+class GitLocalPush
+  def initialize(remote, options)
+    @remote = remote || "origin"
+    @force = parse_options(options)
+  end
+
+  def call
+    `git push -u #{remote} #{current_local_branch} #{force}`
+  end
+
+  private
+
+    attr_reader :remote, :force
+
+    def current_local_branch
+      `git rev-parse --abbrev-ref HEAD`.chomp!
+    end
+
+    def parse_options(options)
+      if options["f"] || options["force"] || options["force-with-lease"]
+        "--force-with-lease"
+      end
+    end
+end
+
+def not_empty_and_not_force_option?
+  !ARGV.empty? && !["-f", "--force", "--force-with-lease"].include?(ARGV.first)
+end
+
+remote = ARGV.first if not_empty_and_not_force_option?
+options = ARGV.getopts("f", "force", "force-with-lease")
+
+GitLocalPush.new(remote, options).call
