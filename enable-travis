@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+module Travis
+  class AddBadge
+    def initialize(file, username:, gem_name:)
+      @file = file
+      @username = username
+      @gem_name = gem_name
+    end
+
+    def run
+      append_badge_to_file
+    end
+
+    private
+    attr_reader :file, :username, :gem_name
+
+    def slug
+      @_slug ||= "#{username}/#{gem_name}"
+    end
+
+    def badge_with_newline
+      "[![Build Status](https://travis-ci.org/#{slug}.svg?branch=master)](https://travis-ci.org/#{slug})\n\n"
+    end
+
+    def append_badge_to_file
+      lines = IO.readlines(file)
+      lines.insert(2, badge_with_newline)
+      IO.write file, lines.join
+    end
+  end
+end
+
+system "travis enable --no-interactive"
+gemspec = Dir["*.gemspec"].last
+spec = Gem::Specification::load(gemspec)
+Travis::AddBadge.new("README.md", username: "JuanitoFatas", gem_name: spec.name).run
+system %(git checkout -b jf.enable-travis)
+system %(git add README.md)
+system %(git commit -m "Enable Travis CI")
+system %(git push origin jf.enable-travis)
+system %(open `hub pull-request -m "Enable CI"`)
