@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+pem_file = ARGV[0]
+
+if pem_file && pem_file.end_with?(".pem")
+  puts `openssl x509 -inform pem -in #{pem_file} -noout -subject`
+else
+  abort("please specify pem file: certificate-hostname pem_file")
+end
