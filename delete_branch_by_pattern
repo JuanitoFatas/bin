@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+pattern = ARGV[0]
+abort("enter pattern to delete branches") unless pattern
+puts "Delete these branches:"
+puts `git for-each-ref --format="%(refname:short)" refs/heads/#{pattern}*`
+puts "Y/N?"
+abort("User Aborted") unless STDIN.gets.chomp.casecmp("y").zero?
+puts `git for-each-ref --format="%(refname:short)" refs/heads/#{pattern}* | xargs git branch -D`

@@ -7,7 +7,7 @@ require "optparse"
 
 class GitLocalPush
   def initialize(remote, options)
-    @remote = remote || "origin"
+    @remote = remote
     @force = parse_options(options)
   end
 
@@ -34,7 +34,18 @@ def not_empty_and_not_force_option?
   !ARGV.empty? && !["-f", "--force", "--force-with-lease"].include?(ARGV.first)
 end
 
-remote = ARGV.first if not_empty_and_not_force_option?
+def find_remote
+  existing_remotes = `git remote`.split("\n")
+  username = `git config --global user.name`.sub(/\s+/, "").rstrip
+
+  if existing_remotes.include?(username)
+    username
+  else
+    "origin"
+  end
+end
+
+remote = find_remote
 options = ARGV.getopts("f", "force", "force-with-lease")
 
 GitLocalPush.new(remote, options).call

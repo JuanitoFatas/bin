@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# Usage:
+#
+# git upsidedown jf.hotfix-for-stranger-things
+# git upsidedown --from=develop jf.hotfix-for-stranger-things
+# git upsidedown --from=develop --folder=~/worktrees jf.hotfix-for-stranger-things
+
+require "etc"
+require "optparse"
+require "fileutils"
+require "english"
+
+def home
+  Etc.getpwuid.dir
+end
+
+def execute(*command)
+  puts command.join(" ")
+  Kernel.system(*command)
+  puts $CHILD_STATUS.exitstatus
+end
+
+def mkdir_p(folder)
+  if !File.exist?(folder)
+    puts "#{folder} folder created."
+    FileUtils.mkdir_p(folder)
+  end
+end
+
+worktree_folder = ENV.fetch("GIT_WORKTREE_DIR") do
+  File.join(home, ".git_upsidedown")
+end
+
+mkdir_p(worktree_folder)
+
+options = ARGV.getopts("", "from:origin/master", "folder:#{worktree_folder}")
+
+branch = ARGV[0]
+from_branch = options.fetch("from")
+worktree_folder = options.fetch("folder")
+worktree_place = File.join(worktree_folder, branch)
+
+execute("git worktree add -b", branch, worktree_place, from_branch)
