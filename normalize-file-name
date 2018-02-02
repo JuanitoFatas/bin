@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# Dependencies
+require "fileutils"
+
+# Normalize file names.
+#
+# Usage:
+#
+# $ ls
+# Screen Shot 2017-02-19 at 13.56.59.png
+#
+# $ normalize-file-name "Screen Shot "
+#
+# $ ls
+# 2017-02-19 at 13.56.59.png
+
+class NormalizeFileName
+	def self.run(removal_pattern, apply_to_files = "./*")
+		new(removal_pattern, apply_to_files).run
+	end
+
+	def initialize(removal_pattern, apply_to_files)
+		@removal_pattern = removal_pattern
+		@apply_to_files = apply_to_files
+	end
+
+	def run
+		matching_files.each do |filename|
+			rename filename, remove_from(filename)
+		end
+	end
+
+	private
+
+	  attr_reader :removal_pattern, :apply_to_files
+
+	  def matching_files
+	  	Dir[apply_to_files].select do |filename|
+	  		filename.include? removal_pattern
+	 		end
+	  end
+
+	  def rename(from, to)
+	  	$stdout.puts "Rename #{from} to #{to}"
+	  	FileUtils.mv from, to
+	  end
+
+	  def remove_from(filename)
+	  	filename.sub(removal_pattern, "")
+	  end
+end
+
+removal_pattern, apply_to_files = ARGV
+NormalizeFileName.run(removal_pattern, apply_to_files)
