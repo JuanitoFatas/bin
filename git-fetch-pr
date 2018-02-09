@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# Fetch PR and checkout to a new branch
+#
+# Usage:
+#
+# $ git fetch-pr 6293 pr-6293
+# $ git branch
+#   master
+# * pr-6269
+
+id, new_branch_name = ARGV
+
+abort("Please specify Pull Request ID") unless id
+abort("Please specify branch name to checkout") unless new_branch_name
+
+`git fetch origin pull/#{id}/head:#{new_branch_name} && git checkout #{new_branch_name}`
