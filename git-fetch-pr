@@ -10,7 +10,7 @@ Signal.trap("INT") { abort }
 # $ git fetch-pr 6293 pr-6293
 # $ git branch
 #   master
-# * pr-6269
+# * pr-6263
 
 id, new_branch_name = ARGV
 
