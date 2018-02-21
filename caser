@@ -3,8 +3,6 @@
 # Exit cleanly from an early interrupt
 Signal.trap("INT") { abort }
 
-require "fileutils"
-
 class Caser
   def self.run(new_case, apply_to_files)
     new(new_case, apply_to_files).run
