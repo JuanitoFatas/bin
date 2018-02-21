@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+require "fileutils"
+
+class Caser
+  def self.run(new_case, apply_to_files)
+    new(new_case, apply_to_files).run
+  end
+
+  def initialize(new_case, apply_to_files)
+    raise ArgumentError unless %w(upper lower).include?(new_case)
+    @new_case = new_case
+    @apply_to_files = apply_to_files
+  end
+
+  def run
+    matching_files.each do |filename|
+      rename filename, new_name(filename)
+    end
+  end
+
+  private
+  attr_reader :new_case, :apply_to_files
+
+  def matching_files
+    Dir[apply_to_files]
+  end
+
+  def rename(from, to)
+    File.rename from, to
+    $stdout.puts "Renamed #{from} to #{to}"
+  end
+
+  def new_name(filename)
+    extension = File.extname filename
+    name = File.basename filename, extension
+    name = new_case == "upper" ? name.upcase : name.downcase
+    [name, extension].reject{ |str| str.empty? }.join
+  end
+end
+
+new_case, apply_to_files = ARGV
+abort(%(Enter pattern, e.g., upper / lower)) unless new_case
+abort("Enter files to apply, e.g., *.png, defaults to ./*") unless apply_to_files
+
+Caser.run(new_case, apply_to_files)
