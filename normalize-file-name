@@ -55,4 +55,6 @@ class NormalizeFileName
 end
 
 removal_pattern, apply_to_files = ARGV
+abort(%(Enter pattern, e.g., "Screen Shot ")) unless removal_pattern
+abort("Enter files to apply, e.g., *.png, defaults to ./*") unless apply_to_files
 NormalizeFileName.run(removal_pattern, apply_to_files)
