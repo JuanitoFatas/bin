@@ -3,6 +3,8 @@
 # Exit cleanly from an early interrupt
 Signal.trap("INT") { abort }
 
+require "fileutils"
+
 # touch + chmod +x
 #
 # Usage:
@@ -11,4 +13,13 @@ Signal.trap("INT") { abort }
 #
 
 file_name = ARGV.first
-`touch #{file_name} && chmod +x #{file_name}`
+
+default_content = <<~DEFAULT
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+DEFAULT
+
+File.write file_name, default_content
+FileUtils.chmod "+x", file_name
