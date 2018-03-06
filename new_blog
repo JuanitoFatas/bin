@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+name = ARGV.first
+
+abort("Please enter post name") if name.nil? || name.empty?
+
+puts `rails "blog_posts:new[#{name}]"`
