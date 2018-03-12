@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# Usage
+#
+# compress_folder folder
+
+target = ARGV.first
+
+if target.nil? || target.empty?
+  abort("Please enter a folder or file name")
+end
+
+puts "tar cvzf #{target}.tar.gz #{target}"
+system "tar cvzf #{target}.tar.gz #{target}"
