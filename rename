@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+if ARGV.empty?
+  abort %(Usage: rename foo bar)
+end
+
+from, to = ARGV
+
+if from.nil? || from.empty?
+  abort "First argument is from pattern"
+end
+
+if to.nil? || to.empty?
+  abort "Second argument is to pattern"
+end
+
+matching_files = Dir["./*"].select { |file| file.include? from }
+
+matching_files.each do |file|
+  new_name = file.sub(from, to)
+
+  puts "Rename #{file} to #{new_name}"
+  File.rename file, new_name
+end
