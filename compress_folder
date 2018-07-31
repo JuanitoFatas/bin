@@ -5,13 +5,41 @@ Signal.trap("INT") { abort }
 
 # Usage
 #
-# compress_folder folder
+# $ compress_folder folder
 
-target = ARGV.first
+class CompressFolder
+  def self.run(target_folder:)
+    new(target_folder).run
+  end
 
-if target.nil? || target.empty?
-  abort("Please enter a folder or file name")
+  def initialize(target_folder)
+    @target_folder = target_folder
+  end
+
+  def run
+    if target_folder_not_given?
+      abort("Please enter a folder or file name")
+    else
+      psystem compress_target_folder_command
+    end
+  end
+
+  private
+
+  attr_reader :target_folder
+
+  def compress_target_folder_command
+    "tar cvzf #{target_folder}.tar.gz #{target_folder}"
+  end
+
+  def target_folder_not_given?
+    target_folder.nil? || target_folder.empty?
+  end
+
+  def psystem(command)
+    puts command
+    system command
+  end
 end
 
-puts "tar cvzf #{target}.tar.gz #{target}"
-system "tar cvzf #{target}.tar.gz #{target}"
+CompressFolder.run(target_folder: ARGV.first)
