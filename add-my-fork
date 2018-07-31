@@ -3,15 +3,44 @@
 # Exit cleanly from an early interrupt
 Signal.trap("INT") { abort }
 
-you = `git config --global user.username`.chomp!.downcase!
+class AddMyFork
+  def self.run(username:, origin_url:)
+    new(username, origin_url).run
+  end
 
-original_url = `git config --get remote.origin.url`.chomp!
+  def initialize(username, origin_url)
+    @username = username
+    @origin_url = origin_url
+  end
 
-author = original_url.scan(/\w+/)[3]
+  def run
+    add_forked_remote
+    display_remotes
+  end
 
-forked_url = original_url.sub!(author, you)
+  private
 
-`git remote add #{you} #{forked_url}`
+  attr_reader :username, :origin_url
 
-puts "\n== #{you} remote added =="
-puts `git remote -v`
+  def author
+    origin_url.scan(/\w+/)[3]
+  end
+
+  def forked_url
+    origin_url.sub!(author, username)
+  end
+
+  def add_forked_remote
+    system "git remote add #{username} #{forked_url}"
+  end
+
+  def display_remotes
+    puts `git remote -v`
+  end
+end
+
+username = `git config --global user.username`.chomp.downcase
+origin_url = `git config --get remote.origin.url`.chomp
+
+AddMyFork.run(username: username, origin_url: origin_url)
+
