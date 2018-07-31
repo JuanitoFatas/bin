@@ -3,11 +3,33 @@
 # Exit cleanly from an early interrupt
 Signal.trap("INT") { abort }
 
-abort('Plesae sepcify upstream URL.') if ARGV.empty?
+class AddUpstream
+  def self.run(url:)
+    new(url).run
+  end
+
+  def initialize(url)
+    @url = url
+    abort("Plesae sepcify upstream URL.") if url.nil? || url.empty?
+  end
+
+  def run
+    add_upstream
+    display_remotes
+  end
+
+  private
+
+  attr_reader :url
+
+  def add_upstream
+    puts `git remote add upstream #{url}`
+  end
+
+  def display_remotes
+    puts `git remote -v`
+  end
+end
 
 url = ARGV.first
-
-`git remote add upstream #{url}`
-
-puts "\n== remote upstream added with URL of #{url}."
-puts `git remote -v`
+AddUpstream.run(url: url)
