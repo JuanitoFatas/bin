@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+file = ARGV[0]
+if file.nil? || file.empty?
+  abort("please create a file contains all branches you want to delete")
+end
+puts IO.read(file)
+puts "Delete these branches, Y/N?"
+
+prompt = STDIN.gets.chomp
+
+if prompt.match? /(yes|y)/
+  system("cat #{file} | xargs git branch -D")
+end
