@@ -12,6 +12,6 @@ puts "Delete these branches, Y/N?"
 
 prompt = STDIN.gets.chomp
 
-if prompt.match? /(yes|y)/
+if prompt.match? /(yes|y)/i
   system("cat #{file} | xargs git branch -D")
 end
