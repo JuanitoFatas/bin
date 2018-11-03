@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+WorkAddress = <<~WORK
+150-0001
+Jingumae 6-12-18 4-107, Shibuya-ku, Tokyo
+Shopify Japan K.K.
+Juanito Fatas
+WORK
+
+WorkAddressJa = <<~WORKJA
+〒150-0001
+東京都渋谷区神宮前6-12-18 4-107
+WeWork 内に
+Shopify Japan 株式会社
+Juanito Fatas
+WORKJA
+
+HomeAddress = <<~HOME
+150-0021
+Ebisunishi 2-13-15-101, Shibuya-ku, Tokyo
+Huang Hsin Hsiang
+HOME
+
+HomeAddressJa = <<~HOMEJA
+〒150-0021
+東京都渋谷区恵比寿西2-13-15-101
+Huang Hsin Hsiang
+HOMEJA
+
+arg = ARGV.first
+case arg
+when "work"
+  puts WorkAddress
+when "work_ja"
+  puts WorkAddressJa
+when "home"
+  puts HomeAddress
+when "home_ja"
+  puts HomeAddressJa
+end
