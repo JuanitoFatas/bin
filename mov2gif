@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require "securerandom"
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+input, output = ARGV
+
+raise "Specify input .mov name" if input.nil? || input.empty?
+raise "Specify output gif name" if output.nil? || output.empty?
+
+random_hash = SecureRandom.hex(8)
+filename = "tmp-#{random_hash}"
+
+STDOUT.puts "Converting from gif to pictures"
+%x(ffmpeg -i #{input} -vf scale=1080:720,fps=30 #{filename}%04d.png)
+
+STDOUT.puts "Combining pictures to gif"
+%x(gifski -o #{output} #{filename}*.png)
+
+STDOUT.puts "Removing pictures"
+%x(rm #{filename}*.png)
+
+STDOUT.puts "Your gif is ready: #{output}"
