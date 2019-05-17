@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+raise if ARGV.empty? || ARGV.first.nil?
+
+path = ARGV.first
+
+current_dir = `pwd`.chomp! + "/"
+
+relative_path = path.sub(current_dir, "")
+
+full_repo = `git rev-parse --show-toplevel`.rstrip.split("/").last(2).join("/")
+
+`open https://github.com/#{full_repo}/blob/master/#{relative_path}`
