@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+# heic2jpg IMG_1234.HEIC
+# heic2jpg folder
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+module HEIC2JPG
+  def self.run(file)
+    directory = File.dirname(file)
+    filename = File.basename(file).upcase
+    name = File.basename(filename, ".HEIC")
+    convert(
+      File.join(directory, "#{name}.HEIC"),
+      File.join(directory, "#{name}.JPG"),
+    )
+  end
+
+  def self.convert(input, output)
+    puts "Convert #{input} to #{output}"
+    exec(
+      "magick",
+      "convert",
+      input,
+      "-gravity",
+      "center",
+      "-crop",
+      "3:2",
+      "+repage",
+      "-quality",
+      "90",
+      output,
+    )
+  end
+end
+
+input = ARGV[0]
+
+abort("Enter a single .HEIC file or a folder contains .HEIC files") if input.nil?
+
+if File.directory?(input)
+  Dir[File.join(input, "*.HEIC")].each do |heic|
+    HEIC2JPG.run(heic)
+  end
+else
+  HEIC2JPG.run(input)
+end
