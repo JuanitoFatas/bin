@@ -1,0 +1,79 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+class JishoWord
+  def initialize(data)
+    @data = data
+  end
+
+  def to_s
+    [
+      "slug: #{slug}",
+      "Japanese: #{word} (#{reading})",
+      "English: #{english}",
+      "Type: #{parts_of_speech}"
+    ].join("\n")
+  end
+
+  private
+
+  attr_reader :data
+
+  def slug
+    data.fetch("slug")
+  end
+
+  def word
+    data.fetch("japanese").first.fetch("word")
+  end
+
+  def reading
+    data.fetch("japanese").first.fetch("reading")
+  end
+
+  def english
+    data.fetch("senses").first.fetch("english_definitions").join(", ")
+  end
+
+  def parts_of_speech
+    data.fetch("senses").first.fetch("parts_of_speech").join(", ")
+  end
+end
+
+require "http"
+class Jisho
+  def self.search(query)
+    new(query).search
+  end
+
+  def initialize(query)
+    @query = query
+  end
+
+  def search
+    puts word
+  end
+
+  private
+
+  ENDPOINT = "https://jisho.org/api/v1/search/words"
+
+  attr_reader :query
+
+  def word
+    JishoWord.new(data)
+  end
+
+  def data
+    JSON.parse(response).fetch("data").first
+  end
+
+  def response
+    HTTP.get(ENDPOINT, params: { keyword: query})
+  end
+end
+
+query = ARGV[0]
+Jisho.search(query)

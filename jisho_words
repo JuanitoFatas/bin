@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+file = ARGV[0]
+File.readlines(file).each do |word|
+  puts "== #{word}"
+  puts `jisho #{word.rstrip}`
+end
