@@ -26,7 +26,10 @@ class JishoWord
   end
 
   def word
-    data.fetch("japanese").first.fetch("word")
+    reading = data.fetch("japanese").first
+    reading.fetch("word") do
+      reading.fetch("reading")
+    end
   end
 
   def reading
