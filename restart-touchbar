@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+`pkill "Touch Bar agent" && killall "ControlStrip"`
+puts "Restarted Touch Tar"
