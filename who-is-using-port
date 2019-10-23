@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+number = ARGV[0]
+
+abort("Please enter a port number.") if number.nil? || number.empty?
+
+result = `lsof -i tcp:#{number}`
+
+if result.empty?
+  puts "Nobody"
+else
+  puts result.rstrip!
+end
