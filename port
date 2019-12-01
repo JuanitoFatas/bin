@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+port = ARGV[0]
+
+system("lsof", "-i" ":#{port}")
