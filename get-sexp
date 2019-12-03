@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+input = ARGV.first
+
+require "ripper"
+pp Ripper.sexp(input)
