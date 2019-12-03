@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+# brew install guetzli
+
+pattern = ARGV.first
+
+Dir[pattern].each do |photo|
+  base = File.basename(photo)
+  puts "Compressing #{base} by guetzli, go do something else ☕️📚"
+  system("guetzli", photo, photo)
+end
