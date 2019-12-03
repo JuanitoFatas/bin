@@ -5,6 +5,7 @@
 
 # Exit cleanly from an early interrupt
 Signal.trap("INT") { abort }
+require "fileutils"
 
 module HEIC2JPG
   def self.run(file)
@@ -32,6 +33,8 @@ module HEIC2JPG
       "90",
       output,
     )
+    FileUtils.rm(input)
+    puts "Deleted #{input}"
   end
 end
 
@@ -40,7 +43,10 @@ input = ARGV[0]
 abort("Enter a single .HEIC file or a folder contains .HEIC files") if input.nil?
 
 if File.directory?(input)
-  Dir[File.join(input, "*.HEIC")].each do |heic|
+  photos = Dir[File.join(input, "*.HEIC")]
+  puts "Converting #{photos.size} photos"
+  photos.each do |heic|
+    puts "Converting #{heic}"
     HEIC2JPG.run(heic)
   end
 else
