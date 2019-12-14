@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+filename = ARGV.first
+echo '(compile-program "#{filename}")' | scheme -q
