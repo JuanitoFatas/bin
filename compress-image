@@ -7,8 +7,16 @@ Signal.trap("INT") { abort }
 
 pattern = ARGV.first
 
+def friendly_size(number)
+  "#{number/1000} KB"
+end
+
 Dir[pattern].each do |photo|
   base = File.basename(photo)
-  puts "Compressing #{base} by guetzli, go do something else ☕️📚"
+  before = File.size(photo)
+  puts "Compressing #{base} by guetzli."
+  puts "Size before: #{friendly_size(before)}"
   system("guetzli", photo, photo)
+  after = File.size(photo)
+  puts "Size  after: #{friendly_size(after)}. Saved: #{friendly_size(before-after)}"
 end
