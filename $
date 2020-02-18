@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby --disable-gems
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+system(*ARGV)
