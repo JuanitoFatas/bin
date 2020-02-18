@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+# heic2jpg IMG_1234.HEIC
+# heic2jpg folder
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+require "fileutils"
+
+module HEIC2JPG
+  def self.run(file)
+    directory = File.dirname(file)
+    filename = File.basename(file)
+    normalized = filename.sub(/.heic/i, ".heic")
+    name = File.basename(normalized, ".heic")
+    convert(
+      File.join(directory, "#{name}.heic"),
+      File.join(directory, "#{name}.jpg"),
+    )
+  end
+
+  def self.convert(input, output)
+    puts "➡️ #{input} to #{output}"
+    system(
+      "magick",
+      "convert",
+      input,
+      "-gravity",
+      "center",
+      "-crop",
+      "2:3",
+      "+repage",
+      "-quality",
+      "90",
+      output,
+    )
+    FileUtils.rm(input)
+    puts "Deleted #{input}"
+  end
+end
+
+input = ARGV[0]
+
+abort("Enter a single .HEIC file or a folder contains .HEIC files") if input.nil?
+
+if File.directory?(input)
+  photos = Dir[File.join(input, "*.HEIC")]
+  puts "Converting #{photos.size} photos"
+  require "pry"; binding.pry
+  photos.each do |heic|
+    puts "Converting #{heic}"
+    HEIC2JPG.run(heic)
+  end
+else
+  HEIC2JPG.run(input)
+end
