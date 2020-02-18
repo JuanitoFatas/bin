@@ -11,6 +11,10 @@ def friendly_size(number)
   "#{number/1000} KB"
 end
 
+def to_jpg(input)
+  File.basename(input) + ".jpg"
+end
+
 Dir[pattern].each do |photo|
   base = File.basename(photo)
   before = File.size(photo)
