@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby --disable-gems
+
+# Exit cleanly from an early interrupt
+Signal.trap("INT") { abort }
+
+File.open("./Procfile", "w") do |file|
+  file.puts "web: bin/rails s -p 3000"
+  file.puts "webpacker: bin/webpack-dev-server"
+end
+
+STDOUT.puts "Procfile created."
