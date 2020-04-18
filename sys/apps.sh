@@ -1,6 +1,3 @@
-# Oh My Zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
 # Sublime
 if [ ! -d "$HOME/bin/" ]; then
   mkdir "$HOME/bin"
@@ -10,3 +7,6 @@ cp "./sublime_snippets/*" "$HOME/Library/Application Support/Sublime Text 3/Pack
 
 cp ./.zshrc "$HOME/.zshrc"
 cp ./.pryrc "$HOME/.pryrc"
+
+# Oh My Zsh
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
