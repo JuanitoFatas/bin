@@ -1,5 +1,3 @@
-#!/usr/bin/sh
-
 # Faster keyboard repeat rate
 defaults write -g KeyRepeat -int 2
 defaults write -g InitialKeyRepeat -int 12
