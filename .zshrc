@@ -6,6 +6,7 @@ export ZSH="$HOME/.oh-my-zsh"
 export LANG=en_US.UTF-8
 export EDITOR="subl -w"
 
+source $ZSH/oh-my-zsh.sh
 source /usr/local/opt/chruby/share/chruby/chruby.sh
 source /usr/local/opt/chruby/share/chruby/auto.sh
 
