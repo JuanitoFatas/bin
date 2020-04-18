@@ -1,9 +1,3 @@
-# Git and GitHub
-ssh-keygen -t rsa -b 4096 -C "me@juanitofatas.com"
-
-eval "$(ssh-agent -s)"
-ssh-add -K ~/.ssh/id_rsa
-
 # Setup Git Stuff
 git config --global user.name "Juanito Fatas"
 git config --global user.email "me@juanitofatas.com"
@@ -18,5 +12,9 @@ git config --global diff.noprefix true
 git config --global hub.protocol https
 git config --global github.user juanitofatas
 
+# SSH key
+ssh-keygen -t rsa -b 4096 -C "me@juanitofatas.com"
+eval "$(ssh-agent -s)"
+ssh-add -K ~/.ssh/id_rsa
 pbcopy < ~/.ssh/id_rsa.pub
 open https://github.com/settings/keys
