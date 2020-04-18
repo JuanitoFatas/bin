@@ -1,0 +1,10 @@
+<snippet>
+  <content><![CDATA[
+add_index :${1:table_names}, :${2:field}, unique: true
+t.index :${2:field}, unique: true
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>unique-index</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>

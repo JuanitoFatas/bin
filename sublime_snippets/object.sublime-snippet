@@ -1,0 +1,21 @@
+<snippet>
+  <content><![CDATA[
+class ${1:this}
+  def initialize(${2:arg})
+    @${2:arg} = ${2:arg}
+  end
+
+  def ${3:method}
+    ${4:write code here}
+  end
+
+  private
+
+  attr_reader :${2:arg}
+end
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>oo</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>

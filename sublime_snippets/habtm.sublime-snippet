@@ -1,0 +1,9 @@
+<snippet>
+  <content><![CDATA[
+has_and_belongs_to_many :${1:table_name_and_dont_forget_to_create_the_join_table}
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>habtm</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>

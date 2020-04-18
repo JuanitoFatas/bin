@@ -1,0 +1,9 @@
+<snippet>
+  <content><![CDATA[
+<lite-youtube videoid="${1:video_id}"></lite-youtube>
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>liteyt</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,10 @@
+<snippet>
+  <content><![CDATA[
+web: bin/rails s -p 3000
+webpacker: bin/webpack-dev-server
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>procfile</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <!-- <scope>source.python</scope> -->
+</snippet>
